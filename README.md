@@ -1,25 +1,10 @@
-# RabbitMQ C AMQP client library
+# RabbitMQ C AMQP client library with TCP keepalive support
 
-[![Build Status](https://secure.travis-ci.org/alanxz/rabbitmq-c.png?branch=master)](http://travis-ci.org/alanxz/rabbitmq-c)
-
-## Introduction
-
-This is a C-language AMQP client library for use with v2.0+ of the
-[RabbitMQ](http://www.rabbitmq.com/) broker.
-
+originally cloned from 
  - <http://github.com/alanxz/rabbitmq-c>
 
-Announcements regarding the library are periodically made on the
-rabbitmq-c-users and cross-posted to rabbitmq-users.
-
- - <https://groups.google.com/forum/#!forum/rabbitmq-c-users>
- - <https://groups.google.com/forum/#!forum/rabbitmq-users>
-
-## Latest Stable Version
-
-The latest stable release of rabbitmq-c can be found at:
-
- - <https://github.com/alanxz/rabbitmq-c/releases/latest>
+Added TCP-Keepalive feature to amqp socket to detect stale connections. Full detection and reconnect logic works in the 
+C++ repo.
 
 ## Documentation
 
