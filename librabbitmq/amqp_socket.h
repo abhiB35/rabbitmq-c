@@ -37,6 +37,13 @@
 
 AMQP_BEGIN_DECLS
 
+/*tcp keepalive params*/
+#define ENABLE_TCP_KEEPALIVE    1
+#define AMQP_TCP_KEEPIDLE       15
+#define AMQP_TCP_KEEPINTVL      2
+#define AMQP_TCP_KEEPCNT        5
+#define AMQP_TCP_USER_TIMEOUT   (AMQP_TCP_KEEPCNT*AMQP_TCP_KEEPINTVL*1000) + AMQP_TCP_KEEPIDLE*1000
+
 typedef enum {
   AMQP_SF_NONE = 0,
   AMQP_SF_MORE = 1,

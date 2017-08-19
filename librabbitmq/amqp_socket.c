@@ -502,6 +502,14 @@ int amqp_open_socket_inner(char const *hostname,
   int sockfd = -1;
   int last_error;
 
+#if ENABLE_TCP_KEEPALIVE
+    int enable = ENABLE_TCP_KEEPALIVE;
+    int idle = AMQP_TCP_KEEPIDLE;
+    int interval = AMQP_TCP_KEEPINTVL;
+    int count = AMQP_TCP_KEEPCNT;
+    int timeout = AMQP_TCP_USER_TIMEOUT;
+#endif
+
   last_error = amqp_os_socket_init();
   if (AMQP_STATUS_OK != last_error) {
     return last_error;
@@ -529,6 +537,29 @@ int amqp_open_socket_inner(char const *hostname,
       last_error = sockfd;
       break;
     }
+#if ENABLE_TCP_KEEPALIVE
+    if (0 != amqp_os_socket_setsockopt(sockfd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int))) {
+      last_error = AMQP_STATUS_SOCKET_ERROR;
+      continue;
+    }
+    if (0 != amqp_os_socket_setsockopt(sockfd, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int))) {
+      last_error = AMQP_STATUS_SOCKET_ERROR;
+      continue;
+    }
+    if (0 != amqp_os_socket_setsockopt(sockfd, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(int))) {
+      last_error = AMQP_STATUS_SOCKET_ERROR;
+      continue;
+    }
+    if (0 != amqp_os_socket_setsockopt(sockfd, IPPROTO_TCP, TCP_KEEPCNT, &count, sizeof(int))) {
+      last_error = AMQP_STATUS_SOCKET_ERROR;
+      continue;
+    }
+    if (0 != amqp_os_socket_setsockopt(sockfd, SOL_TCP, TCP_USER_TIMEOUT, &timeout, sizeof(int))) {
+      last_error = AMQP_STATUS_SOCKET_ERROR;
+      continue;
+    }
+#endif
+
   }
 
   freeaddrinfo(address_list);
